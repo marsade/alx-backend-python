@@ -4,7 +4,7 @@ import asyncio
 wait_random = __import__('0-basic_async_syntax').wait_random
 
 
-def task_wait_ransom(max_delay: int) -> asyncio.Task:
+def task_wait_random(max_delay: int) -> asyncio.Task:
     '''Creates asyncio task
 
     Args: max_delay (int): Maximum delay in seconds
