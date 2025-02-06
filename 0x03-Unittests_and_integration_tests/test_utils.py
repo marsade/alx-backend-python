@@ -41,7 +41,7 @@ class TestAccessNestedMap(unittest.TestCase):
             path (Sequence): A sequence of keys representing
             a path to the value
             expected_exception (type): The expected exception type'''
-        with self.assertRaises(expected_exception) as cm:
+        with self.assertRaises(KeyError) as cm:
             access_nested_map(nested_map, path)
 
 
