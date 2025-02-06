@@ -41,5 +41,9 @@ class TestAccessNestedMap(unittest.TestCase):
             path (Sequence): A sequence of keys representing
             a path to the value
             expected_exception (type): The expected exception type'''
-        with self.assertRaises(expected_exception):
-            res = access_nested_map(nested_map, path)
+        with self.assertRaises(expected_exception) as cm:
+            access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    '''Test get_json function'''
