@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 '''Testing Utils.py'''
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from typing import Mapping, Sequence, Type
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -51,7 +51,7 @@ class TestGetJson(unittest.TestCase):
         ('http://example.com', {'payload': True}),
         ('https://holberton.io', {'payload': True}),
     ])
-    def test_get_json(self, url: str, expected: Mapping) -> None:
+    def test_get_json(self, url: str, expected: Mapping):
         '''Test get_json function with valid inputs
 
         Args:
@@ -64,3 +64,23 @@ class TestGetJson(unittest.TestCase):
 
             mock_get.assert_called_once_with(url)
             self.assertEqual(res, expected)
+
+
+class TestMemoize(unittest.TestCase):
+    '''Test memoize decorator'''
+
+    def test_memoize(self):
+        '''Test the memoization decorator'''
+        class TestClass:
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mock_method:
+            test_object = TestClass()
+            test_object.a_property()
+            test_object.a_property()
+            mock_method.assert_called_once()
