@@ -39,6 +39,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
     @patch('client.get_json')
     def test_public_repos(self, mock_json):
+        '''Test public_repos method'''
         json_res = [{'name': 'google', 'id': 123433, 'gists_url':
                      'https://api.github.com/orgs/google/repos'},
                     {'name': 'kratos', 'id': 123433, 'gists_url':
@@ -63,5 +64,6 @@ class TestGithubOrgClient(unittest.TestCase):
         ({'license': {'key': 'other_license'}}, 'my_license', False)
     ])
     def test_has_license(self, repo, license_key, expected_license):
+        '''Test has_license method'''
         res = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(res, expected_license)
