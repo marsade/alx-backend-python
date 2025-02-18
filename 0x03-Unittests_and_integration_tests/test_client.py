@@ -28,6 +28,7 @@ class TestGithubOrgClient(unittest.TestCase):
             )
 
     def test_public_repos_url(self):
+        '''Test public repositories url'''
         known_payload = {'name': 'google',
                          'repos_url': 'https://github.com/orgs/google'}
 
