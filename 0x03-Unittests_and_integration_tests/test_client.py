@@ -81,7 +81,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.mock_get = cls.get_patcher.start()
         cls.mock_get.return_value.json.side_effect = [
             cls.org_payload, cls.repos_payload,
-            cls.expected_repos, cls.apache2_repos
+            cls.org_payload, cls.repos_payload
         ]
 
     @classmethod
@@ -95,3 +95,10 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         self.assertEqual(test.repos_payload, self.repos_payload)
         self.assertEqual(test.public_repos(), self.expected_repos)
         self.mock_get.assert_called()
+
+    def test_public_repos_with_license(self):
+        '''Test public repositories'''
+        test = GithubOrgClient('google')
+        self.assertEqual(test.public_repos(), self.expected_repos)
+        self.assertEqual(test.public_repos(license='apache-2.0'),
+                         self.apache2_repos)
