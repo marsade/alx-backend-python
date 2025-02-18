@@ -3,7 +3,8 @@
 import unittest
 from unittest.mock import patch, PropertyMock
 from typing import Mapping, Sequence, Type
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
+from fixtures import TEST_PAYLOAD
 from client import GithubOrgClient
 
 
@@ -67,3 +68,29 @@ class TestGithubOrgClient(unittest.TestCase):
         '''Test has_license method'''
         res = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(res, expected_license)
+
+
+@parameterized_class(('org_payload', 'repos_payload', 'expected_repos',
+                     'apache2_repos'), TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    '''Test GithubOrgClient integration with GitHub API'''
+    @classmethod
+    def setUpClass(cls):
+        cls.get_patcher = patch('requests.get')
+        cls.mock_get = cls.get_patcher.start()
+        cls.mock_get.return_value.json.side_effect = [
+            cls.org_payload, cls.repos_payload,
+            cls.expected_repos, cls.apache2_repos
+        ]
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        '''Test public_repos method'''
+        test = GithubOrgClient('google')
+        self.assertEqual(test.org, self.org_payload)
+        self.assertEqual(test.repos_payload, self.repos_payload)
+        self.assertEqual(test.public_repos(), self.expected_repos)
+        self.mock_get.assert_called()
