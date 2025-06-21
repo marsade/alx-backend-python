@@ -1,4 +1,4 @@
-#!/usr/bin/env pyton3
+#!/usr/bin/env python3
 '''Complex annotations - Iterable'''
 from typing import Iterable, Sequence, List, Tuple
 
